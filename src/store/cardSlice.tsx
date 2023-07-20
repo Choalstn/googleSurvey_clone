@@ -8,7 +8,7 @@ export interface InterCard {
 	cardType: string;
 }
 
-interface OptionType {
+export interface OptionType {
 	id: string;
 	text?: string;
 }
@@ -43,11 +43,11 @@ const cardSlice = createSlice({
 
 			if (
 				!(
-					target.cardType === '라디오' ||
+					target.cardType === '객관식 질문' ||
 					target.cardType === '체크박스' ||
 					target.cardType === '드롭다운'
 				) &&
-				(action.payload.cardType === '라디오' ||
+				(action.payload.cardType === '객관식 질문' ||
 					action.payload.cardType === '체크박스' ||
 					action.payload.cardType === '드롭다운')
 			) {
@@ -58,11 +58,11 @@ const cardSlice = createSlice({
 					},
 				];
 			} else if (
-				(target.cardType === '라디오' ||
+				(target.cardType === '객관식 질문' ||
 					target.cardType === '체크박스' ||
 					target.cardType === '드롭다운') &&
 				!(
-					action.payload.cardType === '라디오' ||
+					action.payload.cardType === '객관식 질문' ||
 					action.payload.cardType === '체크박스' ||
 					action.payload.cardType === '드롭다운'
 				)

@@ -3,6 +3,10 @@ import DropDown from './DropDown';
 import { InterCard } from '../store/cardSlice';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
+import Simple from './Answers/Simple';
+import Radio from './Answers/Radio';
+import CheckBox from './Answers/CheckBox';
+import DropDownAn from './Answers/DropDown';
 
 const TopCard = styled.div`
 	height: 15vh;
@@ -39,7 +43,7 @@ const TopCard = styled.div`
 `;
 
 const MainCard = styled.div`
-	height: 25vh;
+	min-height: 25vh;
 	border: 1.5px solid rgb(218, 219, 233);
 	border-radius: 11px;
 	background-color: white;
@@ -85,9 +89,10 @@ function Card({ isTitle, id, idx }: extendedCardProps) {
 
 	const cardInfo = useSelector((state: RootState) =>
 		state.cards.find((el) => el.id === id),
-	);
+	) as InterCard;
 
-	console.log('aaa', cardInfo);
+	console.log('aaa', cardType);
+	console.log(cardInfo);
 
 	return (
 		<>
@@ -102,6 +107,16 @@ function Card({ isTitle, id, idx }: extendedCardProps) {
 						<input type="text" defaultValue="제목없는 질문" />
 						<DropDown id={id} />
 					</div>
+
+					{cardType === '단답형' || cardType === '장문형' ? (
+						<Simple />
+					) : cardType === '객관식 질문' ? (
+						<Radio cardInfo={cardInfo} />
+					) : cardType === '체크박스' ? (
+						<CheckBox cardInfo={cardInfo} />
+					) : cardType === '드롭다운' ? (
+						<DropDownAn cardInfo={cardInfo} />
+					) : null}
 				</MainCard>
 			)}
 		</>
