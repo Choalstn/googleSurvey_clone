@@ -1,5 +1,8 @@
 import styled from 'styled-components';
 import { ReactComponent as SvgPlus } from '../assets/plus.svg';
+import { useDispatch, useSelector } from 'react-redux';
+import { addCard } from '../store/cardSlice';
+import { RootState } from '../store';
 
 const Container = styled.div`
 	border: 1px solid rgb(218, 219, 233);
@@ -20,8 +23,22 @@ const AddCardIcon = styled(SvgPlus)`
 	height: 40%;
 `;
 function AddCard() {
+	const dispatch = useDispatch();
+	const cards = useSelector((state: RootState) => state.cards);
+
+	const handleAddCard = () => {
+		dispatch(
+			addCard({
+				id: cards.length + 1,
+				title: '제목 없는 질문',
+				contents: '',
+				isFocused: false,
+				cardType: '단답형',
+			}),
+		);
+	};
 	return (
-		<Container>
+		<Container onClick={handleAddCard}>
 			<AddCardIcon />
 		</Container>
 	);
