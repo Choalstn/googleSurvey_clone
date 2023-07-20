@@ -4,6 +4,7 @@ import { RootState } from '../store';
 import { useEffect } from 'react';
 import { addCard } from '../store/cardSlice';
 import Card from '../Components/Card';
+import AddCard from '../Components/AddCard';
 
 const Container = styled.div`
 	margin: 20px;
@@ -41,6 +42,8 @@ function CreateForm() {
 					/>
 				))}
 			</Container>
+
+			<AddCard />
 		</>
 	);
 }
