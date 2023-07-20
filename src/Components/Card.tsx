@@ -7,6 +7,9 @@ import Simple from './Answers/Simple';
 import Radio from './Answers/Radio';
 import CheckBox from './Answers/CheckBox';
 import DropDownAn from './Answers/DropDown';
+import { ReactComponent as SvgDelete } from '../assets/delete.svg';
+import { ReactComponent as SvgCopy } from '../assets/copy.svg';
+import { Switch as MSwitch } from '@mui/material';
 
 const TopCard = styled.div`
 	height: 15vh;
@@ -43,7 +46,7 @@ const TopCard = styled.div`
 `;
 
 const MainCard = styled.div`
-	min-height: 25vh;
+	min-height: 28vh;
 	border: 1.5px solid rgb(218, 219, 233);
 	border-radius: 11px;
 	background-color: white;
@@ -77,6 +80,52 @@ const MainCard = styled.div`
 	}
 `;
 
+const EtcFeat = styled.div`
+	display: flex;
+	justify-content: end;
+	align-items: center;
+	margin: 0 10px;
+
+	> div:nth-child(1) {
+		height: 3.5vh;
+		display: flex;
+		align-items: center;
+		padding-right: 20px;
+		border-right: 1px solid rgb(198, 199, 211);
+	}
+
+	> div:nth-child(2) {
+		margin-left: 20px;
+
+		> span {
+			font-size: 14px;
+			margin-right: 3px;
+		}
+	}
+`;
+
+const Copy = styled(SvgCopy)`
+	width: 19px;
+	height: 19px;
+	color: gray;
+	margin-right: 20px;
+`;
+
+const Delete = styled(SvgDelete)`
+	width: 19px;
+	height: 19px;
+	color: gray;
+`;
+
+const Switch = styled(MSwitch)`
+	.Mui-checked {
+		color: #673ab6 !important;
+	}
+	.MuiSwitch-track {
+		background-color: #e0d8f1 !important;
+	}
+`;
+
 export interface extendedCardProps extends InterCard {
 	isTitle: boolean;
 	idx: number;
@@ -90,9 +139,6 @@ function Card({ isTitle, id, idx }: extendedCardProps) {
 	const cardInfo = useSelector((state: RootState) =>
 		state.cards.find((el) => el.id === id),
 	) as InterCard;
-
-	console.log('aaa', cardType);
-	console.log(cardInfo);
 
 	return (
 		<>
@@ -117,6 +163,18 @@ function Card({ isTitle, id, idx }: extendedCardProps) {
 					) : cardType === '드롭다운' ? (
 						<DropDownAn cardInfo={cardInfo} />
 					) : null}
+
+					<EtcFeat>
+						<div>
+							<Copy />
+							<Delete />
+						</div>
+
+						<div>
+							<span>필수</span>
+							<Switch />
+						</div>
+					</EtcFeat>
 				</MainCard>
 			)}
 		</>
