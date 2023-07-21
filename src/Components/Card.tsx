@@ -1,7 +1,7 @@
 import { styled } from 'styled-components';
 import DropDown from './DropDown';
-import { InterCard } from '../store/cardSlice';
-import { useSelector } from 'react-redux';
+import { InterCard, deleteCard } from '../store/cardSlice';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store';
 import Simple from './Answers/Simple';
 import Radio from './Answers/Radio';
@@ -105,16 +105,30 @@ const EtcFeat = styled.div`
 `;
 
 const Copy = styled(SvgCopy)`
-	width: 19px;
-	height: 19px;
+	padding: 8px;
+	width: 30px;
+	height: 30px;
 	color: gray;
 	margin-right: 20px;
+	cursor: pointer;
+
+	&:hover {
+		border-radius: 100%;
+		background-color: #ededed9d;
+	}
 `;
 
 const Delete = styled(SvgDelete)`
-	width: 19px;
-	height: 19px;
+	padding: 8px;
+	width: 30px;
+	height: 30px;
 	color: gray;
+	cursor: pointer;
+
+	&:hover {
+		border-radius: 100%;
+		background-color: #ededed9d;
+	}
 `;
 
 const Switch = styled(MSwitch)`
@@ -132,6 +146,7 @@ export interface extendedCardProps extends InterCard {
 }
 
 function Card({ isTitle, id, idx }: extendedCardProps) {
+	const dispatch = useDispatch();
 	const cardType = useSelector(
 		(state: RootState) => state.cards.find((el) => el.id === id)?.cardType,
 	) as string;
@@ -167,7 +182,15 @@ function Card({ isTitle, id, idx }: extendedCardProps) {
 					<EtcFeat>
 						<div>
 							<Copy />
-							<Delete />
+							<Delete
+								onClick={() =>
+									dispatch(
+										deleteCard({
+											id: id,
+										}),
+									)
+								}
+							/>
 						</div>
 
 						<div>
