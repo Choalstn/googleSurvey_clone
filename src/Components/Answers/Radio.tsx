@@ -88,7 +88,6 @@ interface Props {
 	cardInfo: InterCard;
 }
 function Radio({ cardInfo }: Props) {
-	console.log('info', cardInfo);
 	const dispatch = useDispatch();
 	const handleAddOption = () => {
 		dispatch(

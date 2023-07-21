@@ -1,5 +1,11 @@
 import styled from 'styled-components';
-import { InterCard } from '../../store/cardSlice';
+import {
+	InterCard,
+	addCardOption,
+	deleteCardOption,
+} from '../../store/cardSlice';
+import { useDispatch } from 'react-redux';
+import { ReactComponent as SvgDeleteOption } from '../../assets/deleteOption.svg';
 
 const Container = styled.div`
 	border: none;
@@ -58,25 +64,61 @@ const AddOption = styled.div`
 	}
 `;
 
+const DeleteOption = styled(SvgDeleteOption)`
+	width: 23px;
+	height: 23px;
+	padding: 8px;
+	cursor: pointer;
+
+	&:hover {
+		border-radius: 100%;
+		background-color: #ededed9d;
+	}
+`;
+
 interface Props {
 	cardInfo: InterCard;
 }
 function DropDown({ cardInfo }: Props) {
+	const dispatch = useDispatch();
+	const handleAddOption = () => {
+		dispatch(
+			addCardOption({
+				id: cardInfo.id,
+				textId: cardInfo.contents.length + 1,
+				text: `옵션 ${cardInfo.contents.length + 1}`,
+			}),
+		);
+	};
 	return (
 		<>
 			<Container>
 				{Array.isArray(cardInfo.contents) &&
 					cardInfo.contents.map((el, idx) => (
-						<div>
+						<div key={el.textId}>
 							<Front>{idx + 1}</Front>
 							<Answer defaultValue={el.text} />
+							{cardInfo.contents.length > 1 && (
+								<DeleteOption
+									onClick={() => {
+										dispatch(
+											deleteCardOption({
+												id: cardInfo.id,
+												textId: el.textId,
+											}),
+										);
+									}}
+								/>
+							)}
 						</div>
 					))}
 
 				<AddOption>
 					<p>
 						<Front>{cardInfo.contents.length + 1}</Front>
-						<span className="addOption">옵션추가</span>
+						<span className="addOption" onClick={handleAddOption}>
+							옵션추가
+						</span>
 					</p>
 				</AddOption>
 			</Container>
