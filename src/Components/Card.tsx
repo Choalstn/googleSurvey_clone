@@ -1,6 +1,6 @@
 import { styled } from 'styled-components';
 import DropDown from './DropDown';
-import { InterCard, deleteCard } from '../store/cardSlice';
+import { InterCard, copyCard, deleteCard } from '../store/cardSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store';
 import Simple from './Answers/Simple';
@@ -181,12 +181,20 @@ function Card({ isTitle, id, idx }: extendedCardProps) {
 
 					<EtcFeat>
 						<div>
-							<Copy />
+							<Copy
+								onClick={() =>
+									dispatch(
+										copyCard({
+											id,
+										}),
+									)
+								}
+							/>
 							<Delete
 								onClick={() =>
 									dispatch(
 										deleteCard({
-											id: id,
+											id,
 										}),
 									)
 								}

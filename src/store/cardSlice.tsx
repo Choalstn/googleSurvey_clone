@@ -5,6 +5,7 @@ export interface InterCard {
 	title: string;
 	contents: string | OptionType[];
 	isFocused: boolean;
+	isRequired: boolean;
 	cardType: string;
 }
 
@@ -18,12 +19,17 @@ interface changeType {
 	cardType: string;
 }
 
+interface DeletCopyType {
+	id: number;
+}
+
 const initialState: InterCard[] = [
 	{
 		id: 0,
 		title: '제목 없는 설문지',
 		contents: '',
 		isFocused: false,
+		isRequired: false,
 		cardType: '제목',
 	},
 ];
@@ -72,8 +78,35 @@ const cardSlice = createSlice({
 
 			target.cardType = action.payload.cardType as string;
 		},
+
+		deleteCard: (state: InterCard[], action: PayloadAction<DeletCopyType>) => {
+			const copiedState = state.map((el) => ({ ...el }));
+			const targetCardIndex = copiedState.findIndex(
+				(el) => el.id === action.payload.id,
+			);
+
+			copiedState.splice(targetCardIndex, 1);
+
+			return copiedState;
+		},
+
+		copyCard: (state: InterCard[], action: PayloadAction<DeletCopyType>) => {
+			const copiedState = state.map((el) => ({ ...el }));
+			const target = state.find(
+				(card) => card.id === action.payload.id,
+			) as InterCard;
+
+			const copiedCard = { ...target, id: target.id + 1 };
+
+			console.log(copiedCard);
+
+			console.log(copiedState);
+
+			copiedState.splice(target.id, 0, copiedCard);
+			return copiedState;
+		},
 	},
 });
 
-export const { addCard, changeType } = cardSlice.actions;
+export const { addCard, changeType, deleteCard, copyCard } = cardSlice.actions;
 export default cardSlice.reducer;
