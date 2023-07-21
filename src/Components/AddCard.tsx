@@ -29,10 +29,11 @@ function AddCard() {
 	const handleAddCard = () => {
 		dispatch(
 			addCard({
-				id: cards.length + 1,
+				id: cards[cards.length - 1].id + 1,
 				title: '제목 없는 질문',
 				contents: '',
 				isFocused: false,
+				isRequired: false,
 				cardType: '단답형',
 			}),
 		);
