@@ -1,6 +1,12 @@
 import { styled } from 'styled-components';
 import DropDown from './DropDown';
-import { InterCard, copyCard, deleteCard, setTitle } from '../store/cardSlice';
+import {
+	InterCard,
+	changeRequired,
+	copyCard,
+	deleteCard,
+	setTitle,
+} from '../store/cardSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store';
 import Simple from './Answers/Simple';
@@ -213,7 +219,15 @@ function Card({ isTitle, id, idx }: extendedCardProps) {
 
 						<div>
 							<span>필수</span>
-							<Switch />
+							<Switch
+								onChange={() =>
+									dispatch(
+										changeRequired({
+											id,
+										}),
+									)
+								}
+							/>
 						</div>
 					</EtcFeat>
 				</MainCard>

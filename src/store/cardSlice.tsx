@@ -147,6 +147,17 @@ const cardSlice = createSlice({
 
 			target.contents = copiedContents;
 		},
+
+		changeRequired: (
+			state: InterCard[],
+			action: PayloadAction<ChangeCardInfoType>,
+		) => {
+			const target = state.find(
+				(card) => card.id === action.payload.id,
+			) as InterCard;
+
+			target.isRequired = !target.isRequired;
+		},
 	},
 });
 
@@ -158,5 +169,6 @@ export const {
 	setTitle,
 	addCardOption,
 	deleteCardOption,
+	changeRequired,
 } = cardSlice.actions;
 export default cardSlice.reducer;
