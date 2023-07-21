@@ -20,10 +20,11 @@ function CreateForm() {
 		if (cards.length < 2) {
 			dispatch(
 				addCard({
-					id: cards.length,
+					id: Date.now(),
 					title: '제목 없는 질문',
 					contents: '',
 					isFocused: false,
+					isRequired: false,
 					cardType: '단답형',
 				}),
 			);

@@ -24,12 +24,11 @@ const AddCardIcon = styled(SvgPlus)`
 `;
 function AddCard() {
 	const dispatch = useDispatch();
-	const cards = useSelector((state: RootState) => state.cards);
 
 	const handleAddCard = () => {
 		dispatch(
 			addCard({
-				id: cards[cards.length - 1].id + 1,
+				id: Date.now(),
 				title: '제목 없는 질문',
 				contents: '',
 				isFocused: false,

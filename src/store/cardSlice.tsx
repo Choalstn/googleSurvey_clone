@@ -25,7 +25,7 @@ interface DeletCopyType {
 
 const initialState: InterCard[] = [
 	{
-		id: 0,
+		id: Date.now(),
 		title: '제목 없는 설문지',
 		contents: '',
 		isFocused: false,
@@ -96,11 +96,7 @@ const cardSlice = createSlice({
 				(card) => card.id === action.payload.id,
 			) as InterCard;
 
-			const copiedCard = { ...target, id: target.id + 1 };
-
-			console.log(copiedCard);
-
-			console.log(copiedState);
+			const copiedCard = { ...target, id: Date.now() };
 
 			copiedState.splice(target.id, 0, copiedCard);
 			return copiedState;
