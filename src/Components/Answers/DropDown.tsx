@@ -3,6 +3,7 @@ import {
 	InterCard,
 	addCardOption,
 	deleteCardOption,
+	setText,
 } from '../../store/cardSlice';
 import { useDispatch } from 'react-redux';
 import { ReactComponent as SvgDeleteOption } from '../../assets/deleteOption.svg';
@@ -90,6 +91,20 @@ function DropDown({ cardInfo }: Props) {
 			}),
 		);
 	};
+
+	const handleOptionValue = (
+		e: React.ChangeEvent<HTMLInputElement>,
+		textId: number,
+	) => {
+		console.log(e.target.value, textId);
+		dispatch(
+			setText({
+				textId,
+				id: cardInfo.id,
+				text: e.target.value,
+			}),
+		);
+	};
 	return (
 		<>
 			<Container>
@@ -97,7 +112,10 @@ function DropDown({ cardInfo }: Props) {
 					cardInfo.contents.map((el, idx) => (
 						<div key={el.textId}>
 							<Front>{idx + 1}</Front>
-							<Answer defaultValue={el.text} />
+							<Answer
+								defaultValue={el.text}
+								onChange={(e) => handleOptionValue(e, el.textId)}
+							/>
 							{cardInfo.contents.length > 1 && (
 								<DeleteOption
 									onClick={() => {

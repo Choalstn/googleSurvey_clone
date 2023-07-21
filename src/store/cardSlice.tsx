@@ -121,6 +121,26 @@ const cardSlice = createSlice({
 			target.title = action.payload.title!;
 		},
 
+		setText: (state: InterCard[], action: PayloadAction<OptionType>) => {
+			const target = state.find(
+				(card) => card.id === action.payload.id,
+			) as InterCard;
+
+			if (target.cardType === '제목') {
+				target.contents = action.payload.text!;
+			} else if (
+				target.cardType === '객관식 질문' ||
+				target.cardType === '체크박스' ||
+				target.cardType === '드롭다운'
+			) {
+				const contents = target.contents as OptionType[];
+				const targetContents = contents.find(
+					(el) => el.textId === action.payload.textId,
+				) as OptionType;
+				targetContents.text = action.payload.text;
+			}
+		},
+
 		addCardOption: (state: InterCard[], action: PayloadAction<OptionType>) => {
 			const targetContents = state.find((el) => el.id === action.payload.id)
 				?.contents as OptionType[];
@@ -170,5 +190,6 @@ export const {
 	addCardOption,
 	deleteCardOption,
 	changeRequired,
+	setText,
 } = cardSlice.actions;
 export default cardSlice.reducer;

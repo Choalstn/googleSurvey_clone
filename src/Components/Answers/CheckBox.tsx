@@ -4,6 +4,7 @@ import {
 	InterCard,
 	addCardOption,
 	deleteCardOption,
+	setText,
 } from '../../store/cardSlice';
 import { ReactComponent as SvgSquare } from '../../assets/CheckBoxSquare.svg';
 import { ReactComponent as SvgDeleteOption } from '../../assets/deleteOption.svg';
@@ -98,6 +99,20 @@ function CheckBox({ cardInfo }: Props) {
 			}),
 		);
 	};
+
+	const handleOptionValue = (
+		e: React.ChangeEvent<HTMLInputElement>,
+		textId: number,
+	) => {
+		console.log(e.target.value, textId);
+		dispatch(
+			setText({
+				textId,
+				id: cardInfo.id,
+				text: e.target.value,
+			}),
+		);
+	};
 	return (
 		<>
 			<Container>
@@ -105,7 +120,10 @@ function CheckBox({ cardInfo }: Props) {
 					cardInfo.contents.map((el, idx) => (
 						<div key={el.textId}>
 							<CheckBoxSquare />
-							<Answer defaultValue={el.text} />
+							<Answer
+								defaultValue={el.text}
+								onChange={(e) => handleOptionValue(e, el.textId)}
+							/>
 							{cardInfo.contents.length > 1 && (
 								<DeleteOption
 									onClick={() => {
