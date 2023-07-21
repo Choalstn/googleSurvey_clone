@@ -10,7 +10,8 @@ export interface InterCard {
 }
 
 export interface OptionType {
-	id: string;
+	id?: number;
+	textId: number;
 	text?: string;
 }
 
@@ -21,6 +22,12 @@ interface changeType {
 
 interface DeletCopyType {
 	id: number;
+}
+
+interface ChangeCardInfoType {
+	id: number;
+	title?: string;
+	contents?: string | OptionType[];
 }
 
 const initialState: InterCard[] = [
@@ -59,7 +66,7 @@ const cardSlice = createSlice({
 			) {
 				target.contents = [
 					{
-						id: String(Date.now()),
+						textId: Date.now(),
 						text: '옵션 1',
 					},
 				];
@@ -81,6 +88,7 @@ const cardSlice = createSlice({
 
 		deleteCard: (state: InterCard[], action: PayloadAction<DeletCopyType>) => {
 			const copiedState = state.map((el) => ({ ...el }));
+
 			const targetCardIndex = copiedState.findIndex(
 				(el) => el.id === action.payload.id,
 			);
@@ -101,8 +109,54 @@ const cardSlice = createSlice({
 			copiedState.splice(target.id, 0, copiedCard);
 			return copiedState;
 		},
+
+		setTitle: (
+			state: InterCard[],
+			action: PayloadAction<ChangeCardInfoType>,
+		) => {
+			const target = state.find(
+				(card) => card.id === action.payload.id,
+			) as InterCard;
+
+			target.title = action.payload.title!;
+		},
+
+		addCardOption: (state: InterCard[], action: PayloadAction<OptionType>) => {
+			const targetContents = state.find((el) => el.id === action.payload.id)
+				?.contents as OptionType[];
+
+			targetContents.push({
+				textId: action.payload.textId,
+				text: action.payload.text,
+			});
+		},
+
+		deleteCardOption: (
+			state: InterCard[],
+			action: PayloadAction<OptionType>,
+		) => {
+			const target = state.find(
+				(card) => card.id === action.payload.id,
+			) as InterCard;
+			const targetContents = target.contents as OptionType[];
+			const copiedContents = targetContents.map((el) => ({ ...el }));
+			const targetOptionIndex = copiedContents.findIndex(
+				(el) => el.textId === action.payload.textId,
+			);
+			copiedContents.splice(targetOptionIndex, 1);
+
+			target.contents = copiedContents;
+		},
 	},
 });
 
-export const { addCard, changeType, deleteCard, copyCard } = cardSlice.actions;
+export const {
+	addCard,
+	changeType,
+	deleteCard,
+	copyCard,
+	setTitle,
+	addCardOption,
+	deleteCardOption,
+} = cardSlice.actions;
 export default cardSlice.reducer;

@@ -1,6 +1,6 @@
 import { styled } from 'styled-components';
 import DropDown from './DropDown';
-import { InterCard, copyCard, deleteCard } from '../store/cardSlice';
+import { InterCard, copyCard, deleteCard, setTitle } from '../store/cardSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store';
 import Simple from './Answers/Simple';
@@ -155,6 +155,12 @@ function Card({ isTitle, id, idx }: extendedCardProps) {
 		state.cards.find((el) => el.id === id),
 	) as InterCard;
 
+	const handleTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+		dispatch(setTitle({ id, title: e.target.value }));
+	};
+
+	console.log(cardInfo);
+
 	return (
 		<>
 			{isTitle ? (
@@ -165,12 +171,16 @@ function Card({ isTitle, id, idx }: extendedCardProps) {
 			) : (
 				<MainCard>
 					<div>
-						<input type="text" defaultValue="제목없는 질문" />
+						<input
+							type="text"
+							defaultValue={cardInfo.title}
+							onChange={(e) => handleTitle(e)}
+						/>
 						<DropDown id={id} />
 					</div>
 
 					{cardType === '단답형' || cardType === '장문형' ? (
-						<Simple />
+						<Simple cardInfo={cardInfo} />
 					) : cardType === '객관식 질문' ? (
 						<Radio cardInfo={cardInfo} />
 					) : cardType === '체크박스' ? (
