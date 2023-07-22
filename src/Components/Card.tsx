@@ -6,6 +6,7 @@ import {
 	changeRequired,
 	copyCard,
 	deleteCard,
+	setText,
 	setTitle,
 } from '../store/cardSlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -231,6 +232,16 @@ function Card({ isTitle, id }: extendedCardProps) {
 		dispatch(setTitle({ id, title: e.target.value }));
 	};
 
+	const handleText = (e: React.ChangeEvent<HTMLInputElement>) => {
+		dispatch(
+			setText({
+				id,
+				textId: id,
+				text: e.target.value,
+			}),
+		);
+	};
+
 	const handleCardFocus = (id: number) => {
 		dispatch(
 			changeFocused({
@@ -251,8 +262,16 @@ function Card({ isTitle, id }: extendedCardProps) {
 					<FocusedCard isFocused={cardInfo.isFocused} top={true} />
 
 					<div className="contents">
-						<input type="text" defaultValue="제목 없는 설문지" />
-						<input type="text" placeholder="설문지 설명" />
+						<input
+							type="text"
+							defaultValue="제목 없는 설문지"
+							onChange={(e) => handleTitle(e)}
+						/>
+						<input
+							type="text"
+							placeholder="설문지 설명"
+							onChange={(e) => handleText(e)}
+						/>
 					</div>
 				</TopCard>
 			) : (
