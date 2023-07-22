@@ -1,7 +1,8 @@
-import { styled } from 'styled-components';
+import { css, styled } from 'styled-components';
 import DropDown from './DropDown';
 import {
 	InterCard,
+	changeFocused,
 	changeRequired,
 	copyCard,
 	deleteCard,
@@ -17,70 +18,113 @@ import { ReactComponent as SvgDelete } from '../assets/delete.svg';
 import { ReactComponent as SvgCopy } from '../assets/copy.svg';
 import { Switch as MSwitch } from '@mui/material';
 
-const TopCard = styled.div`
+interface FocusedType {
+	isFocused: boolean;
+	top?: boolean;
+}
+
+const TopCard = styled.div<FocusedType>`
 	height: 15vh;
 	border: 1.5px solid rgb(218, 219, 233);
 	border-top: 12px solid #673ab6;
 	border-radius: 11px;
 	background-color: white;
 	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	padding: 0 30px;
 
-	> input:nth-child(1) {
-		height: 50px;
-		margin-bottom: 10px;
-		font-size: 30px;
-		font-weight: 500;
-		border: none;
+	${(props) =>
+		props.isFocused &&
+		css`
+			box-shadow: 0.3px 1px #b2b1b1;
+		`}
 
-		&:focus {
-			outline: none;
-			border-bottom: 2px solid #673ab6;
+	.contents {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		justify-content: center;
+		padding-left: 10px;
+		padding-right: 15px;
+
+		> input:nth-child(1) {
+			height: 50px;
+			margin-bottom: 10px;
+			font-size: 30px;
+			font-weight: 500;
+			border: none;
+
+			${(props) =>
+				props.isFocused &&
+				css`
+					border-bottom: 1px solid rgb(218, 219, 233);
+				`}
+
+			&:focus {
+				outline: none;
+				border-bottom: 2px solid #673ab6;
+			}
 		}
-	}
 
-	> input:nth-child(2) {
-		border: none;
+		> input:nth-child(2) {
+			border: none;
 
-		&:focus {
-			outline: none;
-			border-bottom: 2px solid #673ab6;
+			${(props) =>
+				props.isFocused &&
+				css`
+					border-bottom: 1px solid rgb(218, 219, 233);
+				`}
+
+			&:focus {
+				outline: none;
+				border-bottom: 2px solid #673ab6;
+			}
 		}
 	}
 `;
 
-const MainCard = styled.div`
+const MainCard = styled.div<FocusedType>`
 	min-height: 28vh;
 	border: 1.5px solid rgb(218, 219, 233);
 	border-radius: 11px;
 	background-color: white;
 	display: flex;
-	flex-direction: column;
-	justify-content: flex-start;
-	padding: 10px;
 	margin-top: 15px;
 
-	> div:nth-child(1) {
+	${(props) =>
+		props.isFocused &&
+		css`
+			box-shadow: 0.3px 1px #b2b1b1;
+		`}
+
+	.contents {
 		padding: 10px;
 		display: flex;
-		height: 8vh;
-		justify-content: space-between;
-		align-items: center;
+		flex-direction: column;
+		width: 100%;
 
-		> input:nth-child(1) {
-			padding-left: 10px;
-			font-size: 15px;
-			height: 100%;
-			width: 50%;
-			font-weight: 500;
-			border: none;
+		.header {
+			width: 100%;
+			display: flex;
+			justify-content: space-between;
+			> input:nth-child(1) {
+				padding-left: 10px;
+				font-size: 15px;
+				height: 100%;
+				width: 50%;
+				font-weight: 500;
+				border: none;
 
-			&:focus {
-				outline: none;
-				border-bottom: 2px solid #673ab6;
-				background-color: #f6f6f6;
+				${(props) =>
+					props.isFocused &&
+					css`
+						border-bottom: 1px solid #9b9b9b;
+						background-color: #f2f2f29c;
+					`}
+
+				&:focus {
+					outline: none;
+					border-bottom: 2px solid #673ab6;
+					background-color: #f6f6f6;
+				}
 			}
 		}
 	}
@@ -146,12 +190,34 @@ const Switch = styled(MSwitch)`
 	}
 `;
 
+const FocusedCard = styled.div<FocusedType>`
+	min-height: 100%;
+	border-left: 6px solid white;
+
+	${(props) =>
+		props.isFocused &&
+		props.top &&
+		css`
+			border-left: 6px solid #4284f3;
+			border-bottom-left-radius: 11px;
+		`}
+
+	${(props) =>
+		props.isFocused &&
+		!props.top &&
+		css`
+			border-left: 6px solid #4284f3;
+			border-bottom-left-radius: 11px;
+			border-top-left-radius: 11px;
+		`}
+`;
+
 export interface extendedCardProps extends InterCard {
 	isTitle: boolean;
 	idx: number;
 }
 
-function Card({ isTitle, id, idx }: extendedCardProps) {
+function Card({ isTitle, id }: extendedCardProps) {
 	const dispatch = useDispatch();
 	const cardType = useSelector(
 		(state: RootState) => state.cards.find((el) => el.id === id)?.cardType,
@@ -165,71 +231,92 @@ function Card({ isTitle, id, idx }: extendedCardProps) {
 		dispatch(setTitle({ id, title: e.target.value }));
 	};
 
+	const handleCardFocus = (id: number) => {
+		dispatch(
+			changeFocused({
+				id,
+			}),
+		);
+	};
+
 	console.log(cardInfo);
 
 	return (
 		<>
 			{isTitle ? (
-				<TopCard>
-					<input type="text" defaultValue="제목 없는 설문지" />
-					<input type="text" placeholder="설문지 설명" />
+				<TopCard
+					onClick={() => handleCardFocus(0)}
+					isFocused={cardInfo.isFocused}
+				>
+					<FocusedCard isFocused={cardInfo.isFocused} top={true} />
+
+					<div className="contents">
+						<input type="text" defaultValue="제목 없는 설문지" />
+						<input type="text" placeholder="설문지 설명" />
+					</div>
 				</TopCard>
 			) : (
-				<MainCard>
-					<div>
-						<input
-							type="text"
-							defaultValue={cardInfo.title}
-							onChange={(e) => handleTitle(e)}
-						/>
-						<DropDown id={id} />
+				<MainCard
+					onClick={() => handleCardFocus(id)}
+					isFocused={cardInfo.isFocused}
+				>
+					<FocusedCard isFocused={cardInfo.isFocused} top={false} />
+					<div className="contents">
+						<div className="header">
+							<input
+								type="text"
+								placeholder={cardInfo.title}
+								onChange={(e) => handleTitle(e)}
+							/>
+							<DropDown id={id} />
+						</div>
+
+						{cardType === '단답형' || cardType === '장문형' ? (
+							<Simple cardInfo={cardInfo} />
+						) : cardType === '객관식 질문' ? (
+							<Radio cardInfo={cardInfo} />
+						) : cardType === '체크박스' ? (
+							<CheckBox cardInfo={cardInfo} />
+						) : cardType === '드롭다운' ? (
+							<DropDownAn cardInfo={cardInfo} />
+						) : null}
+
+						<EtcFeat>
+							<div>
+								<Copy
+									onClick={() =>
+										dispatch(
+											copyCard({
+												id,
+											}),
+										)
+									}
+								/>
+								<Delete
+									onClick={() =>
+										dispatch(
+											deleteCard({
+												id,
+											}),
+										)
+									}
+								/>
+							</div>
+
+							<div>
+								<span>필수</span>
+								<Switch
+									onChange={() =>
+										dispatch(
+											changeRequired({
+												id,
+											}),
+										)
+									}
+								/>
+							</div>
+						</EtcFeat>
 					</div>
-
-					{cardType === '단답형' || cardType === '장문형' ? (
-						<Simple cardInfo={cardInfo} />
-					) : cardType === '객관식 질문' ? (
-						<Radio cardInfo={cardInfo} />
-					) : cardType === '체크박스' ? (
-						<CheckBox cardInfo={cardInfo} />
-					) : cardType === '드롭다운' ? (
-						<DropDownAn cardInfo={cardInfo} />
-					) : null}
-
-					<EtcFeat>
-						<div>
-							<Copy
-								onClick={() =>
-									dispatch(
-										copyCard({
-											id,
-										}),
-									)
-								}
-							/>
-							<Delete
-								onClick={() =>
-									dispatch(
-										deleteCard({
-											id,
-										}),
-									)
-								}
-							/>
-						</div>
-
-						<div>
-							<span>필수</span>
-							<Switch
-								onChange={() =>
-									dispatch(
-										changeRequired({
-											id,
-										}),
-									)
-								}
-							/>
-						</div>
-					</EtcFeat>
 				</MainCard>
 			)}
 		</>

@@ -32,7 +32,7 @@ interface ChangeCardInfoType {
 
 const initialState: InterCard[] = [
 	{
-		id: Date.now(),
+		id: 0,
 		title: '제목 없는 설문지',
 		contents: '',
 		isFocused: false,
@@ -178,6 +178,17 @@ const cardSlice = createSlice({
 
 			target.isRequired = !target.isRequired;
 		},
+
+		changeFocused: (
+			state: InterCard[],
+			action: PayloadAction<ChangeCardInfoType>,
+		) => {
+			return state.map((card) =>
+				card.id === action.payload.id
+					? { ...card, isFocused: true }
+					: { ...card, isFocused: false },
+			);
+		},
 	},
 });
 
@@ -190,6 +201,7 @@ export const {
 	addCardOption,
 	deleteCardOption,
 	changeRequired,
+	changeFocused,
 	setText,
 } = cardSlice.actions;
 export default cardSlice.reducer;
