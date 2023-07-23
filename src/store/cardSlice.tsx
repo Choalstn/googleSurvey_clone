@@ -13,6 +13,7 @@ export interface OptionType {
 	id?: number;
 	textId: number;
 	text?: string;
+	isEtc?: boolean;
 }
 
 interface changeType {
@@ -40,6 +41,18 @@ const initialState: InterCard[] = [
 		cardType: '제목',
 	},
 ];
+
+const sortOptions = (contents: OptionType[]) => {
+	const etcOption = contents.filter((el) => el.isEtc);
+	const etcIndex = contents.findIndex((el) => el.isEtc);
+
+	console.log('sort', etcIndex);
+
+	if (etcOption.length > 0) {
+		contents.splice(etcIndex, 1);
+		contents.push(...etcOption);
+	}
+};
 
 const cardSlice = createSlice({
 	name: 'cardReducer',
@@ -149,6 +162,8 @@ const cardSlice = createSlice({
 				textId: action.payload.textId,
 				text: action.payload.text,
 			});
+
+			sortOptions(targetContents);
 		},
 
 		deleteCardOption: (
@@ -189,6 +204,17 @@ const cardSlice = createSlice({
 					: { ...card, isFocused: false },
 			);
 		},
+
+		addEtcOption: (state: InterCard[], action: PayloadAction<OptionType>) => {
+			const targetContents = state.find((el) => el.id === action.payload.id)
+				?.contents as OptionType[];
+
+			targetContents.push({
+				textId: action.payload.textId,
+				text: action.payload.text,
+				isEtc: true,
+			});
+		},
 	},
 });
 
@@ -203,5 +229,6 @@ export const {
 	changeRequired,
 	changeFocused,
 	setText,
+	addEtcOption,
 } = cardSlice.actions;
 export default cardSlice.reducer;

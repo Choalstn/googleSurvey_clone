@@ -2,7 +2,9 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import {
 	InterCard,
+	OptionType,
 	addCardOption,
+	addEtcOption,
 	deleteCardOption,
 	setText,
 } from '../../store/cardSlice';
@@ -37,6 +39,20 @@ const Answer = styled.input`
 	&:focus {
 		outline: none;
 		border-bottom: 3px solid #673ab6;
+	}
+`;
+const AnswerEtc = styled.div`
+	border: none;
+	border-bottom: 1px dotted rgb(198, 199, 211);
+	margin: 15px;
+	margin-left: 5px;
+	width: 80%;
+	padding: 5px;
+	color: gray;
+	font-size: 15px;
+
+	&:focus {
+		outline: none;
 	}
 `;
 
@@ -89,13 +105,26 @@ interface Props {
 	cardInfo: InterCard;
 }
 function Radio({ cardInfo }: Props) {
+	const contents = cardInfo.contents as OptionType[];
+
 	const dispatch = useDispatch();
+
 	const handleAddOption = () => {
 		dispatch(
 			addCardOption({
 				id: cardInfo.id,
 				textId: Date.now(),
-				text: `옵션 ${cardInfo.contents.length + 1}`,
+				text: `옵션 ${contents.filter((el) => !el.isEtc).length + 1}`,
+			}),
+		);
+	};
+
+	const handleAddEtcOption = () => {
+		dispatch(
+			addEtcOption({
+				id: cardInfo.id,
+				textId: Date.now(),
+				text: '기타...',
 			}),
 		);
 	};
@@ -120,10 +149,14 @@ function Radio({ cardInfo }: Props) {
 					cardInfo.contents.map((el, idx) => (
 						<div key={el.textId}>
 							<RadioCircle />
-							<Answer
-								defaultValue={el.text}
-								onChange={(e) => handleOptionValue(e, el.textId)}
-							/>
+							{el.isEtc ? (
+								<AnswerEtc>기타...</AnswerEtc>
+							) : (
+								<Answer
+									defaultValue={el.text}
+									onChange={(e) => handleOptionValue(e, el.textId)}
+								/>
+							)}
 							{cardInfo.contents.length > 1 && (
 								<DeleteOption
 									onClick={() => {
@@ -145,8 +178,14 @@ function Radio({ cardInfo }: Props) {
 						<span className="addOption" onClick={handleAddOption}>
 							옵션추가
 						</span>
-						&nbsp; 또는 &nbsp;
-						<span className="addEtc">'기타'추가</span>
+						{contents.filter((el) => el.isEtc).length === 0 && (
+							<>
+								&nbsp; 또는 &nbsp;
+								<span className="addEtc" onClick={handleAddEtcOption}>
+									'기타'추가
+								</span>
+							</>
+						)}
 					</p>
 				</AddOption>
 			</Container>
