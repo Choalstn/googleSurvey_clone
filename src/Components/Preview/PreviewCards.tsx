@@ -45,6 +45,10 @@ const MainCard = styled.div`
 		background-color: white;
 		color: black;
 	}
+
+	.required {
+		color: rgb(200, 64, 49);
+	}
 `;
 
 export interface extendedCardProps extends InterCard {
@@ -79,7 +83,10 @@ function PreviewCard({ isTitle, id }: extendedCardProps) {
 				</TopCard>
 			) : (
 				<MainCard>
-					<div className="title">{cardInfo.title}</div>
+					<div className="title">
+						{cardInfo.title}{' '}
+						<span className="required">{cardInfo.isRequired && '*'}</span>
+					</div>
 
 					{cardType === '단답형' || cardType === '장문형' ? (
 						<PreviewSimple cardInfo={cardInfo} />
