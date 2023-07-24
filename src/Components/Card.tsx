@@ -332,6 +332,7 @@ function Card({ isTitle, id }: extendedCardProps) {
 											}),
 										)
 									}
+									{...(cardInfo.isRequired ? { defaultChecked: true } : {})}
 								/>
 							</div>
 						</EtcFeat>
