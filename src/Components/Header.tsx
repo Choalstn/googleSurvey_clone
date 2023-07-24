@@ -23,10 +23,15 @@ const Eye = styled(SvgEye)`
 `;
 
 function Header() {
+	const loca = window.location.pathname;
 	return (
-		<Container>
-			<Eye></Eye>
-		</Container>
+		<>
+			{loca === '/preview' ? null : (
+				<Container>
+					<Eye onClick={() => window.open('/preview', '_blank')} />
+				</Container>
+			)}
+		</>
 	);
 }
 
