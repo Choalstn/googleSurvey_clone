@@ -1,5 +1,7 @@
 import styled, { css } from 'styled-components';
-import { InterCard } from '../../store/cardSlice';
+import { InterCard, setText } from '../../store/cardSlice';
+import { useDispatch } from 'react-redux';
+import { deleterequiredOtems } from '../../store/requiredSlice';
 
 interface Props {
 	cardInfo: InterCard;
@@ -36,10 +38,36 @@ const Answer = styled.input<CardType>`
 `;
 
 function PreviewSimple({ cardInfo }: Props) {
-	console.log(cardInfo.cardType);
+	const dispatch = useDispatch();
+
+	const handleUserAns = (
+		e: React.ChangeEvent<HTMLInputElement>,
+		cardId: number,
+	) => {
+		dispatch(
+			setText({
+				textId: Date.now(),
+				id: cardId,
+				text: e.target.value,
+			}),
+		);
+
+		if (cardInfo.contents.length > 0) {
+			dispatch(
+				deleterequiredOtems({
+					cardInfo,
+				}),
+			);
+		}
+	};
 	return (
 		<>
-			<Answer type="text" value="답변 ..." cardType={cardInfo.cardType} />
+			<Answer
+				type="text"
+				value={cardInfo.contents as string}
+				onChange={(e) => handleUserAns(e, cardInfo.id)}
+				cardType={cardInfo.cardType}
+			/>
 		</>
 	);
 }

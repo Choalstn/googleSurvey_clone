@@ -2,7 +2,10 @@ import styled from 'styled-components';
 import { InterCard, OptionType } from '../../store/cardSlice';
 import { Select as MSelect, SelectChangeEvent } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { selectDrop } from '../../store/cardSlice';
+import { deleterequiredOtems } from '../../store/requiredSlice';
 
 interface Props {
 	cardInfo: InterCard;
@@ -21,20 +24,41 @@ const Select = styled(MSelect)`
 function PreviewDropDown({ cardInfo }: Props) {
 	const [selectedOption, setSelectedOption] = useState('');
 
+	const dispatch = useDispatch();
+
 	const contents = cardInfo.contents as OptionType[];
-	const options = [] as string[];
-	contents.map((el) => options.push(el.text!));
-	console.log(options);
 
 	const handleOptionChange = (e: SelectChangeEvent<unknown>) => {
 		setSelectedOption(e.target.value as string);
 	};
+
+	const handleClickOption = (clickInfo: OptionType) => {
+		const filter = contents.filter((el) => el.textId === clickInfo.textId);
+
+		dispatch(
+			selectDrop({
+				id: cardInfo.id,
+				textId: filter[0].textId,
+				text: filter[0].text,
+			}),
+		);
+
+		dispatch(
+			deleterequiredOtems({
+				cardInfo,
+			}),
+		);
+	};
 	return (
 		<>
 			<Select value={selectedOption} onChange={(e) => handleOptionChange(e)}>
-				{options.map((el, idx) => (
-					<MenuItem key={idx} value={el}>
-						{el}
+				{contents.map((el, idx) => (
+					<MenuItem
+						key={idx}
+						value={el.text}
+						onClick={() => handleClickOption(el)}
+					>
+						{el.text}
 					</MenuItem>
 				))}
 			</Select>

@@ -14,6 +14,7 @@ export interface OptionType {
 	textId: number;
 	text?: string;
 	isEtc?: boolean;
+	isChecked?: boolean;
 }
 
 interface changeType {
@@ -45,8 +46,6 @@ const initialState: InterCard[] = [
 const sortOptions = (contents: OptionType[]) => {
 	const etcOption = contents.filter((el) => el.isEtc);
 	const etcIndex = contents.findIndex((el) => el.isEtc);
-
-	console.log('sort', etcIndex);
 
 	if (etcOption.length > 0) {
 		contents.splice(etcIndex, 1);
@@ -151,6 +150,8 @@ const cardSlice = createSlice({
 					(el) => el.textId === action.payload.textId,
 				) as OptionType;
 				targetContents.text = action.payload.text;
+			} else {
+				target.contents = action.payload.text as string;
 			}
 		},
 
@@ -215,6 +216,19 @@ const cardSlice = createSlice({
 				isEtc: true,
 			});
 		},
+
+		selectDrop: (state: InterCard[], action: PayloadAction<OptionType>) => {
+			const target = state.find(
+				(el) => el.id === action.payload.id,
+			) as InterCard;
+			const targetContents = target.contents as OptionType[];
+
+			const targetOption = targetContents.find(
+				(el) => el.textId === action.payload.textId,
+			) as OptionType;
+
+			targetOption.isChecked = !targetOption.isChecked;
+		},
 	},
 });
 
@@ -230,5 +244,7 @@ export const {
 	changeFocused,
 	setText,
 	addEtcOption,
+	selectDrop,
 } = cardSlice.actions;
+
 export default cardSlice.reducer;
