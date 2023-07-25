@@ -25,6 +25,7 @@ const Answer = styled.div`
 		outline: none;
 	}
 `;
+
 function Simple() {
 	return (
 		<Container>

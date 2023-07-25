@@ -291,7 +291,7 @@ function Card({ isTitle, id }: extendedCardProps) {
 						</div>
 
 						{cardType === '단답형' || cardType === '장문형' ? (
-							<Simple cardInfo={cardInfo} />
+							<Simple />
 						) : cardType === '객관식 질문' ? (
 							<Radio cardInfo={cardInfo} />
 						) : cardType === '체크박스' ? (

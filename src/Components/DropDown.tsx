@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { Select as MSelect, SelectChangeEvent } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { InterCard, changeType } from '../store/cardSlice';
 import { RootState } from '../store';
