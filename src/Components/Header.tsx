@@ -26,7 +26,7 @@ function Header() {
 	const loca = window.location.pathname;
 	return (
 		<>
-			{loca === '/preview' ? null : (
+			{loca === '/preview' || loca === '/result' ? null : (
 				<Container>
 					<Eye onClick={() => window.open('/preview', '_blank')} />
 				</Container>
