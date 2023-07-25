@@ -96,7 +96,6 @@ function DropDown({ cardInfo }: Props) {
 		e: React.ChangeEvent<HTMLInputElement>,
 		textId: number,
 	) => {
-		console.log(e.target.value, textId);
 		dispatch(
 			setText({
 				textId,

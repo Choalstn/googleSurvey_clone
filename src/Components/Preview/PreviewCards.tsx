@@ -70,8 +70,6 @@ function PreviewCard({ isTitle, id }: extendedCardProps) {
 			state.cards.find((el) => el.id === 0)?.contents as string,
 	);
 
-	console.log('top', topCardContents.length);
-
 	return (
 		<>
 			{isTitle ? (

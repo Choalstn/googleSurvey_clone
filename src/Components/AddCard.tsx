@@ -1,8 +1,7 @@
 import styled from 'styled-components';
 import { ReactComponent as SvgPlus } from '../assets/plus.svg';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { addCard } from '../store/cardSlice';
-import { RootState } from '../store';
 
 const Container = styled.div`
 	border: 1px solid rgb(218, 219, 233);

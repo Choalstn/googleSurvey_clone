@@ -250,8 +250,6 @@ function Card({ isTitle, id }: extendedCardProps) {
 		);
 	};
 
-	console.log(cardInfo);
-
 	return (
 		<>
 			{isTitle ? (

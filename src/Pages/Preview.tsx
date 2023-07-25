@@ -21,10 +21,6 @@ function Preview() {
 		(el) => el.isRequired,
 	);
 
-	const requiredId = useSelector((state: RootState) => state.requiredItems);
-
-	console.log('idid', requiredId);
-
 	useEffect(() => {
 		for (let i = 0; i < requiredCards.length; i++) {
 			dispatch(
@@ -53,6 +49,3 @@ function Preview() {
 }
 
 export default Preview;
-function dispatch(arg0: any) {
-	throw new Error('Function not implemented.');
-}
